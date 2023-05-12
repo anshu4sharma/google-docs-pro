@@ -18,7 +18,11 @@ const TOOLBAR_OPTIONS = [
 const TextEditor = () => {
   const { id } = useParams();
   const [socket, setSocket] = useState<ReturnType<typeof io>>();
-  const [quill, setQuill] = useState<any>();
+  const [quill, setQuill] = useState<unknown>();
+  const copyUrlToClipboard = () => {
+    const locationUrl = window.location.href;
+    navigator.clipboard.writeText(locationUrl);
+  };
   const wrapperRef = useCallback((wrapper: HTMLDivElement) => {
     const editor = document.createElement("div");
     if (!wrapper) return;
@@ -85,15 +89,16 @@ const TextEditor = () => {
   }, [socket, quill]);
 
   return (
-    <>
+    <div className="w-full">
       <div className="container" ref={wrapperRef} />
       <button
         type="button"
-        className="py-2 px-10 inline-flex justify-center items-center gap-2 rounded-full bg-[#c2e7ff] border border-transparent font-semibold text-blue-500 hover:bg-blue-100 focus:outline-none "
+        onClick={copyUrlToClipboard}
+        className="py-2 px-10 sticky right-8 left-8 flex bottom-4 justify-center items-center gap-2 rounded-full bg-blue-600 border border-transparent font-semibold text-white hover:bg-blue-800 hover:text-white focus:outline-none "
       >
-        Share
+        🔗 Share Link
       </button>
-    </>
+    </div>
   );
 };
 
