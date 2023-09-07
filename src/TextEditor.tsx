@@ -18,7 +18,7 @@ const TOOLBAR_OPTIONS = [
 const TextEditor = () => {
   const { id } = useParams();
   const [socket, setSocket] = useState<ReturnType<typeof io>>();
-  const [quill, setQuill] = useState<unknown>();
+  const [quill, setQuill] = useState<Quill>();
   const copyUrlToClipboard = () => {
     const locationUrl = window.location.href;
     navigator.clipboard.writeText(locationUrl);
@@ -49,8 +49,8 @@ const TextEditor = () => {
   }, []);
   useEffect(() => {
     if (!socket || !quill) return;
-    const handler = (delta: unknown) => {
-      quill.updateContents(delta);
+    const handler = (delta: any) => {
+      quill.updateContents(delta as any);
     };
     socket.on("receive-changes", handler);
     return () => {
@@ -72,7 +72,7 @@ const TextEditor = () => {
   useEffect(() => {
     if (!socket || !quill) return;
     socket.once("load-document", (document: unknown) => {
-      quill.setContents(document);
+      quill.setContents(document as any);
       quill.enable();
     });
     socket.emit("get-document", id);
